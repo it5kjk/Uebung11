@@ -1,23 +1,27 @@
 package gui;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JScrollPane;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
 
 public class Kontaktliste extends JFrame {
 
@@ -34,6 +38,7 @@ public class Kontaktliste extends JFrame {
 	private JList<String> listContacts;
 	
 	private DefaultListModel<String> contactModel = new DefaultListModel<String>();
+	private String filename = "." + java.io.File.separator + "contacts.dat";
 	
 	/**
 	 * Launch the application.
@@ -115,7 +120,7 @@ public class Kontaktliste extends JFrame {
 		});
 		btnCreateContact.setBounds(220, 74, 130, 23);
 		contentPane.add(btnCreateContact);
-		
+		 
 		JLabel lblContactList = new JLabel("Kontaktliste");
 		lblContactList.setBounds(10, 110, 86, 14);
 		contentPane.add(lblContactList);
@@ -128,6 +133,34 @@ public class Kontaktliste extends JFrame {
 		listContacts.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listContacts.setModel(contactModel);
 		scrollPane.setViewportView(listContacts);
+		
+		File importfile = new File(filename);
+		BufferedReader in = null;
+		if (!importfile.exists()) {
+			try {
+				importfile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			String entry;
+			try {
+				in = new BufferedReader(new FileReader(importfile));
+				while ((entry = in.readLine()) != null) {
+					contactModel.addElement(entry);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				if (in != null) {
+					try {
+						in.close();
+					} catch (Exception e2) {
+						e2.printStackTrace();
+					}
+				}
+			}
+		}
 		
 		btnDeleteContact = new JButton("l\u00F6schen");
 		btnDeleteContact.addActionListener(new ActionListener() {
@@ -158,6 +191,25 @@ public class Kontaktliste extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				BufferedWriter out = null;
+				try {
+					out = new BufferedWriter(new FileWriter(filename));
+					
+					for (int i = 0; i < contactModel.size(); i++) {
+						out.write(contactModel.get(i).toString());
+						out.newLine();
+					}
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				} finally {
+					if (out != null) {
+						try {
+							out.close();
+						} catch (IOException e2) {
+							e2.printStackTrace();
+						}
+					}
+				}
 				System.exit(0);
 			}
 		});
