@@ -25,7 +25,7 @@ public class EncryptionWriter extends FilterWriter {
 	
 	public void write(String s, int offset, int count) throws IOException{
 		for (int i = 0; i < count; i++) {
-			write(s.charAt(offset) + i);
+			write(s.charAt(offset + i));
 		}
 	}
 	

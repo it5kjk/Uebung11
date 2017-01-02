@@ -25,6 +25,10 @@ import javax.swing.border.EmptyBorder;
 
 public class Kontaktliste extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4326751122929983713L;
 	private JPanel contentPane;
 	private JTextField tfSurname;
 	private JTextField tfForename;
@@ -114,7 +118,6 @@ public class Kontaktliste extends JFrame {
 		btnCreateContact.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				saveContact();
 			}
 		});
@@ -190,7 +193,6 @@ public class Kontaktliste extends JFrame {
 		btnExit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				BufferedWriter out = null;
 				try {
 					out = new BufferedWriter(new FileWriter(filename));
